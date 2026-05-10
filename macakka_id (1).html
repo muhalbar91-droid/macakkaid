@@ -1,0 +1,2659 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macakka.Id - Pilah Sampahmu, Jaga Bumi Kita Bersama</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D6A1F; --primary-medium: #3B6D11; --primary-bright: #639922;
+            --primary-light: #C0DD97; --primary-pale: #F4FAF0;
+            --teal: #1D9E75; --teal-light: #5DCAA5; --teal-pale: #E1F5EE;
+            --cream: #F5F0E8; --dark: #444441; --white: #FFFFFF;
+            --amber: #F59E0B; --amber-light: #FEF3C7;
+            --gray: #9CA3AF; --gray-light: #F3F4F6;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --radius: 12px; --radius-lg: 16px; --radius-xl: 24px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; color: var(--dark); background: var(--white); line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; line-height: 1.2; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--primary-pale); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .delay-100 { animation-delay: 0.1s; } .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; } .delay-400 { animation-delay: 0.4s; }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Loading */
+        .loading-screen { position: fixed; inset: 0; background: var(--primary-pale); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s, visibility 0.5s; }
+        .loading-screen.hidden { opacity: 0; visibility: hidden; }
+        .loading-leaf { width: 60px; height: 60px; animation: spin 1.5s linear infinite; }
+        .loading-text { margin-top: 20px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--primary); }
+
+        /* Navbar */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 1000; transition: all 0.3s ease; border-bottom: 1px solid transparent; }
+        .navbar.scrolled { box-shadow: var(--shadow-lg); border-bottom-color: var(--primary-light); }
+        .navbar-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer; }
+        .logo-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .logo-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.4rem; }
+        .logo-macakka { color: var(--primary); } .logo-id { color: var(--teal); }
+        .nav-menu { display: flex; gap: 32px; list-style: none; }
+        .nav-menu a { text-decoration: none; color: var(--dark); font-weight: 500; font-size: 0.95rem; transition: color 0.2s; position: relative; cursor: pointer; }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
+        .nav-menu a.active::after { content: ''; position: absolute; bottom: -6px; left: 0; right: 0; height: 3px; background: var(--primary); border-radius: 2px; }
+        .nav-cta { background: var(--primary); color: var(--white) !important; padding: 10px 24px; border-radius: 100px; font-weight: 600; transition: all 0.3s; border: none; cursor: pointer; font-size: 0.95rem; }
+        .nav-cta:hover { background: var(--primary-medium); transform: translateY(-2px); box-shadow: var(--shadow); }
+        .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+        .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; background: var(--white); box-shadow: var(--shadow-lg); padding: 20px; z-index: 999; border-radius: 0 0 var(--radius) var(--radius); }
+        .mobile-menu.active { display: block; animation: fadeIn 0.3s ease-out; }
+        .mobile-menu a { display: block; padding: 12px 16px; color: var(--dark); text-decoration: none; font-weight: 500; border-radius: 8px; transition: all 0.2s; }
+        .mobile-menu a:hover, .mobile-menu a.active { background: var(--primary-pale); color: var(--primary); }
+
+        /* Pages */
+        .page { display: none; padding-top: 72px; min-height: 100vh; }
+        .page.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+        /* Hero */
+        .hero { background: var(--primary-pale); position: relative; overflow: hidden; padding: 80px 0 60px; }
+        .hero-pattern { position: absolute; inset: 0; opacity: 0.15; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 C20 15, 10 25, 30 45 C50 25, 40 15, 30 5Z' fill='%232D6A1F'/%3E%3C/svg%3E"); background-size: 80px 80px; }
+        .hero-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--white); padding: 8px 16px; border-radius: 100px; font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-bottom: 24px; box-shadow: var(--shadow-sm); }
+        .hero h1 { font-size: 3.2rem; color: var(--primary); margin-bottom: 20px; line-height: 1.1; }
+        .hero p { font-size: 1.15rem; color: var(--dark); opacity: 0.8; margin-bottom: 32px; max-width: 500px; }
+        .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 100px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; font-family: inherit; }
+        .btn-primary { background: var(--primary); color: var(--white); }
+        .btn-primary:hover { background: var(--primary-medium); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: var(--white); }
+        .btn-white { background: var(--white); color: var(--primary); }
+        .btn-white:hover { background: var(--cream); transform: translateY(-2px); }
+        .btn-teal { background: var(--teal); color: var(--white); }
+        .btn-teal:hover { background: #178a63; transform: translateY(-2px); }
+        .btn-amber { background: var(--amber); color: var(--white); }
+        .btn-amber:hover { background: #d97706; transform: translateY(-2px); }
+        .btn-gray { background: var(--gray-light); color: var(--dark); }
+        .btn-gray:hover { background: #e5e7eb; }
+        .btn-sm { padding: 8px 16px; font-size: 0.875rem; }
+        .btn-lg { padding: 16px 32px; font-size: 1.1rem; }
+        .hero-illustration { display: flex; justify-content: center; align-items: center; }
+        .hero-illustration svg { max-width: 100%; height: auto; filter: drop-shadow(0 20px 40px rgba(45,106,31,0.15)); }
+
+        /* Stats Strip */
+        .stats-strip { background: var(--primary); padding: 40px 0; position: relative; overflow: hidden; }
+        .stats-strip::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10 C30 30, 20 50, 50 80 C80 50, 70 30, 50 10Z' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E"); background-size: 120px 120px; }
+        .stats-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; position: relative; z-index: 1; }
+        .stat-item { text-align: center; color: var(--white); }
+        .stat-number { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.5rem; font-weight: 800; display: block; margin-bottom: 4px; }
+        .stat-label { font-size: 0.95rem; opacity: 0.9; }
+
+        /* Sections */
+        .section { padding: 80px 0; }
+        .section-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 48px; }
+        .section-header h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 12px; }
+        .section-header p { color: var(--dark); opacity: 0.7; font-size: 1.05rem; }
+        .section-tag { display: inline-block; background: var(--primary-pale); color: var(--primary); padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; }
+
+        /* Cards */
+        .card { background: var(--white); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow); transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.04); }
+        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .card-icon { width: 56px; height: 56px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .card-icon svg { width: 28px; height: 28px; }
+        .card h3 { font-size: 1.25rem; margin-bottom: 12px; color: var(--dark); }
+        .card p { color: var(--dark); opacity: 0.7; font-size: 0.95rem; line-height: 1.6; }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+
+        .features-section { background: var(--white); }
+        .feature-card .card-icon { background: var(--primary-pale); color: var(--primary); }
+        .feature-card:nth-child(2) .card-icon { background: var(--teal-pale); color: var(--teal); }
+        .feature-card:nth-child(3) .card-icon { background: var(--amber-light); color: var(--amber); }
+
+        /* How It Works */
+        .how-it-works { background: var(--cream); }
+        .steps-container { display: flex; gap: 24px; position: relative; }
+        .steps-container::before { content: ''; position: absolute; top: 40px; left: 60px; right: 60px; height: 3px; background: var(--primary-light); z-index: 0; }
+        .step { flex: 1; text-align: center; position: relative; z-index: 1; }
+        .step-number { width: 80px; height: 80px; background: var(--primary); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.75rem; font-weight: 800; margin: 0 auto 20px; border: 4px solid var(--cream); box-shadow: var(--shadow); }
+        .step:nth-child(2) .step-number { background: var(--teal); }
+        .step:nth-child(3) .step-number { background: var(--primary-bright); }
+        .step:nth-child(4) .step-number { background: var(--primary-medium); }
+        .step h4 { font-size: 1.1rem; margin-bottom: 8px; color: var(--dark); }
+        .step p { font-size: 0.9rem; color: var(--dark); opacity: 0.7; }
+
+        /* Testimonials */
+        .testimonials { background: var(--white); }
+        .testimonial-card { background: var(--primary-pale); border-radius: var(--radius-lg); padding: 32px; position: relative; }
+        .testimonial-card::before { content: '"'; position: absolute; top: 16px; right: 24px; font-size: 4rem; color: var(--primary-light); font-family: serif; line-height: 1; }
+        .testimonial-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin-bottom: 16px; }
+        .testimonial-text { font-style: italic; margin-bottom: 16px; color: var(--dark); line-height: 1.7; }
+        .testimonial-author { font-weight: 600; color: var(--dark); }
+        .testimonial-location { font-size: 0.85rem; color: var(--gray); }
+
+        /* CTA Section */
+        .cta-section { background: var(--primary); padding: 80px 0; text-align: center; position: relative; overflow: hidden; }
+        .cta-section::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 15 C40 35, 25 55, 60 90 C95 55, 80 35, 60 15Z' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E"); background-size: 150px 150px; }
+        .cta-section h2 { color: var(--white); font-size: 2.2rem; margin-bottom: 16px; position: relative; z-index: 1; }
+        .cta-section p { color: var(--primary-light); font-size: 1.1rem; margin-bottom: 32px; position: relative; z-index: 1; }
+
+        /* Footer */
+        .footer { background: var(--dark); color: var(--white); padding: 60px 0 30px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { opacity: 0.7; margin-top: 12px; font-size: 0.95rem; line-height: 1.7; }
+        .footer h4 { font-size: 1rem; margin-bottom: 20px; color: var(--primary-light); }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; cursor: pointer; }
+        .footer-links a:hover { color: var(--primary-light); }
+        .social-links { display: flex; gap: 12px; margin-top: 20px; }
+        .social-links a { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); transition: all 0.3s; text-decoration: none; }
+        .social-links a:hover { background: var(--primary); transform: translateY(-2px); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; text-align: center; opacity: 0.6; font-size: 0.9rem; }
+
+        /* Floating WA */
+        .float-wa { position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); box-shadow: 0 4px 12px rgba(37,211,102,0.4); cursor: pointer; z-index: 998; transition: all 0.3s; text-decoration: none; }
+        .float-wa:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(37,211,102,0.5); }
+        .float-wa-tooltip { position: absolute; right: 70px; background: var(--dark); color: var(--white); padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; white-space: nowrap; opacity: 0; transform: translateX(10px); transition: all 0.3s; pointer-events: none; }
+        .float-wa:hover .float-wa-tooltip { opacity: 1; transform: translateX(0); }
+
+        /* Cookie Banner */
+        .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); padding: 20px 24px; z-index: 997; display: flex; align-items: center; justify-content: space-between; gap: 20px; transform: translateY(100%); transition: transform 0.4s ease; }
+        .cookie-banner.show { transform: translateY(0); }
+        .cookie-banner p { font-size: 0.9rem; color: var(--dark); }
+        .cookie-banner button { background: var(--primary); color: var(--white); border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap; }
+
+        /* Gamification */
+        .gamification-bar { position: fixed; top: 80px; right: 20px; background: var(--white); padding: 12px 16px; border-radius: var(--radius); box-shadow: var(--shadow-lg); z-index: 998; display: flex; align-items: center; gap: 12px; transition: all 0.3s; border: 2px solid var(--primary-light); }
+        .gamification-bar:hover { transform: translateY(-2px); }
+        .level-badge { background: var(--primary); color: var(--white); padding: 4px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
+        .points-bar { width: 100px; height: 6px; background: var(--gray-light); border-radius: 3px; overflow: hidden; }
+        .points-fill { height: 100%; background: var(--teal); border-radius: 3px; transition: width 0.5s ease; width: 65%; }
+        .points-text { font-size: 0.8rem; font-weight: 600; color: var(--primary); }
+
+        .point-toast { position: fixed; top: 100px; right: 20px; background: var(--teal); color: var(--white); padding: 14px 20px; border-radius: var(--radius); box-shadow: var(--shadow-lg); z-index: 999; display: flex; align-items: center; gap: 10px; font-weight: 600; transform: translateX(150%); transition: transform 0.4s ease; }
+        .point-toast.show { transform: translateX(0); }
+
+        /* Page Headers */
+        .page-header { background: var(--primary-pale); padding: 60px 0 40px; text-align: center; }
+        .page-header h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 12px; }
+        .page-header p { color: var(--dark); opacity: 0.7; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Filter Tabs */
+        .filter-tabs { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+        .filter-tab { padding: 10px 20px; border-radius: 100px; border: 2px solid var(--gray-light); background: var(--white); color: var(--dark); font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.9rem; }
+        .filter-tab:hover { border-color: var(--primary-light); }
+        .filter-tab.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+        /* Category Cards */
+        .category-card { border-radius: var(--radius-lg); padding: 32px; position: relative; overflow: hidden; transition: all 0.3s; }
+        .category-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .category-card.organic { background: var(--primary-pale); border: 2px solid var(--primary-light); }
+        .category-card.anorganic { background: var(--teal-pale); border: 2px solid var(--teal-light); }
+        .category-card.b3 { background: var(--amber-light); border: 2px solid #FCD34D; }
+        .category-card.residu { background: var(--gray-light); border: 2px solid #D1D5DB; }
+        .category-icon { width: 64px; height: 64px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .organic .category-icon { background: var(--primary); color: var(--white); }
+        .anorganic .category-icon { background: var(--teal); color: var(--white); }
+        .b3 .category-icon { background: var(--amber); color: var(--white); }
+        .residu .category-icon { background: var(--gray); color: var(--white); }
+        .category-badge { display: inline-block; padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; margin-top: 16px; }
+        .organic .category-badge { background: var(--primary); color: var(--white); }
+        .anorganic .category-badge { background: var(--teal); color: var(--white); }
+        .b3 .category-badge { background: var(--amber); color: var(--white); }
+        .residu .category-badge { background: var(--gray); color: var(--white); }
+        .category-card h3 { font-size: 1.4rem; margin-bottom: 12px; }
+        .organic h3 { color: var(--primary); } .anorganic h3 { color: var(--teal); }
+        .b3 h3 { color: #B45309; } .residu h3 { color: var(--dark); }
+        .category-examples { margin: 12px 0; font-size: 0.9rem; opacity: 0.8; }
+        .category-examples strong { display: block; margin-bottom: 4px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Video Cards */
+        .video-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; }
+        .video-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .video-thumbnail { aspect-ratio: 16/9; background: var(--primary); display: flex; align-items: center; justify-content: center; position: relative; }
+        .video-thumbnail svg { color: var(--white); }
+        .video-duration { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.7); color: var(--white); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+        .video-info { padding: 20px; }
+        .video-info h4 { font-size: 1rem; margin-bottom: 8px; }
+        .video-info p { font-size: 0.85rem; color: var(--gray); }
+
+        /* Calculator */
+        .calculator-box { background: var(--white); border-radius: var(--radius-xl); padding: 40px; box-shadow: var(--shadow-lg); max-width: 600px; margin: 0 auto; border: 2px solid var(--primary-light); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--dark); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; border: 2px solid var(--gray-light); border-radius: var(--radius); font-family: inherit; font-size: 1rem; transition: border-color 0.2s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--gray-light); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .checkbox-item:hover { background: var(--primary-pale); }
+        .checkbox-item input { width: auto; }
+        .checkbox-item.checked { background: var(--primary-pale); border: 2px solid var(--primary); }
+
+        /* Service Cards */
+        .service-card { background: var(--white); border-radius: var(--radius-lg); padding: 40px 32px; text-align: center; box-shadow: var(--shadow); transition: all 0.3s; border: 2px solid transparent; }
+        .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--primary-light); }
+        .service-icon { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+        .service-icon svg { width: 40px; height: 40px; }
+        .service-card h3 { font-size: 1.3rem; margin-bottom: 12px; }
+        .service-card p { color: var(--dark); opacity: 0.7; margin-bottom: 20px; font-size: 0.95rem; }
+        .service-price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 20px; }
+        .service-price span { font-size: 0.9rem; font-weight: 400; color: var(--gray); }
+
+        /* Map */
+        .map-container { background: var(--primary-pale); border-radius: var(--radius-lg); height: 400px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .map-svg { width: 100%; height: 100%; }
+        .location-list { margin-top: 24px; }
+        .location-item { display: flex; align-items: flex-start; gap: 16px; padding: 16px; background: var(--white); border-radius: var(--radius); margin-bottom: 12px; box-shadow: var(--shadow-sm); transition: all 0.2s; }
+        .location-item:hover { box-shadow: var(--shadow); transform: translateX(4px); }
+        .location-icon { width: 48px; height: 48px; background: var(--primary-pale); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: var(--primary); flex-shrink: 0; }
+        .location-info h4 { font-size: 1rem; margin-bottom: 4px; }
+        .location-info p { font-size: 0.85rem; color: var(--gray); }
+        .location-hours { display: inline-block; background: var(--teal-pale); color: var(--teal); padding: 4px 10px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; margin-top: 4px; }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 40px; }
+        .timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 3px; background: var(--primary-light); border-radius: 3px; }
+        .timeline-item { position: relative; padding-bottom: 32px; }
+        .timeline-item::before { content: ''; position: absolute; left: -33px; top: 4px; width: 20px; height: 20px; background: var(--primary); border-radius: 50%; border: 3px solid var(--white); box-shadow: 0 0 0 3px var(--primary-light); }
+        .timeline-item h4 { font-size: 1.1rem; margin-bottom: 8px; }
+        .timeline-item p { color: var(--dark); opacity: 0.7; font-size: 0.95rem; }
+
+        /* Product Cards */
+        .product-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; position: relative; }
+        .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+        .product-image { aspect-ratio: 1; background: var(--primary-pale); display: flex; align-items: center; justify-content: center; position: relative; }
+        .product-image svg { width: 64px; height: 64px; color: var(--primary); opacity: 0.5; }
+        .product-badge { position: absolute; top: 12px; left: 12px; background: var(--teal); color: var(--white); padding: 4px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
+        .product-wishlist { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; box-shadow: var(--shadow-sm); transition: all 0.2s; }
+        .product-wishlist:hover { background: #FEE2E2; color: #EF4444; }
+        .product-info { padding: 20px; }
+        .product-seller { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.85rem; color: var(--gray); }
+        .product-seller-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: var(--primary); }
+        .product-info h4 { font-size: 1rem; margin-bottom: 8px; line-height: 1.4; }
+        .product-rating { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+        .stars { color: #FBBF24; font-size: 0.9rem; }
+        .rating-text { font-size: 0.85rem; color: var(--gray); }
+        .product-price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem; font-weight: 800; color: var(--primary); }
+        .product-actions { display: flex; gap: 8px; margin-top: 12px; }
+        .product-actions .btn { flex: 1; justify-content: center; }
+
+        /* Search */
+        .search-bar { display: flex; gap: 12px; margin-bottom: 24px; }
+        .search-input { flex: 1; position: relative; }
+        .search-input input { width: 100%; padding: 12px 16px 12px 44px; border: 2px solid var(--gray-light); border-radius: var(--radius); font-family: inherit; font-size: 1rem; }
+        .search-input svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--gray); }
+        .search-input input:focus { outline: none; border-color: var(--primary); }
+
+        /* Seller */
+        .seller-card { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); margin-bottom: 12px; transition: all 0.2s; }
+        .seller-card:hover { box-shadow: var(--shadow); }
+        .seller-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; }
+        .seller-info h4 { font-size: 0.95rem; margin-bottom: 2px; }
+        .seller-info p { font-size: 0.8rem; color: var(--gray); }
+        .seller-rating { margin-left: auto; text-align: right; }
+        .seller-rating .stars { font-size: 0.8rem; }
+
+        /* Community */
+        .community-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
+        .community-stat { background: var(--white); padding: 24px; border-radius: var(--radius-lg); text-align: center; box-shadow: var(--shadow); border: 2px solid var(--primary-pale); }
+        .community-stat-number { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800; color: var(--primary); display: block; }
+        .community-stat-label { font-size: 0.9rem; color: var(--gray); margin-top: 4px; }
+
+        .thread-card { background: var(--white); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); margin-bottom: 16px; transition: all 0.2s; border: 2px solid transparent; }
+        .thread-card:hover { border-color: var(--primary-light); transform: translateX(4px); }
+        .thread-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .thread-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--white); font-size: 1rem; flex-shrink: 0; }
+        .thread-meta h4 { font-size: 1rem; margin-bottom: 2px; }
+        .thread-meta span { font-size: 0.8rem; color: var(--gray); }
+        .thread-tag { display: inline-block; padding: 4px 12px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; }
+        .thread-tag.organik { background: var(--primary-pale); color: var(--primary); }
+        .thread-tag.plastik { background: var(--teal-pale); color: var(--teal); }
+        .thread-tag.b3 { background: var(--amber-light); color: #B45309; }
+        .thread-tag.umum { background: var(--gray-light); color: var(--dark); }
+        .thread-summary { color: var(--dark); opacity: 0.8; font-size: 0.95rem; margin-bottom: 12px; line-height: 1.6; }
+        .thread-footer { display: flex; align-items: center; justify-content: space-between; }
+        .thread-stats { display: flex; gap: 16px; font-size: 0.85rem; color: var(--gray); }
+        .thread-stats span { display: flex; align-items: center; gap: 4px; }
+
+        /* Gallery */
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .gallery-item { aspect-ratio: 1; background: var(--primary-pale); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; transition: all 0.3s; cursor: pointer; }
+        .gallery-item:hover { transform: scale(1.03); box-shadow: var(--shadow); }
+        .gallery-item svg { width: 48px; height: 48px; color: var(--primary); margin-bottom: 12px; }
+        .gallery-item p { font-size: 0.85rem; color: var(--dark); font-weight: 500; }
+
+        /* Events */
+        .event-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); display: flex; transition: all 0.3s; }
+        .event-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .event-date { background: var(--primary); color: var(--white); padding: 24px; text-align: center; min-width: 100px; display: flex; flex-direction: column; justify-content: center; }
+        .event-date-day { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800; }
+        .event-date-month { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .event-info { padding: 24px; flex: 1; }
+        .event-info h4 { font-size: 1.1rem; margin-bottom: 8px; }
+        .event-info p { color: var(--gray); font-size: 0.9rem; margin-bottom: 12px; }
+        .event-type { display: inline-block; padding: 4px 12px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; }
+        .event-type.online { background: var(--teal-pale); color: var(--teal); }
+        .event-type.offline { background: var(--primary-pale); color: var(--primary); }
+
+        /* About */
+        .about-hero { background: var(--primary); padding: 100px 0 60px; text-align: center; color: var(--white); }
+        .about-hero h1 { font-size: 2.8rem; margin-bottom: 16px; color: var(--white); }
+        .about-hero p { font-size: 1.2rem; opacity: 0.9; max-width: 700px; margin: 0 auto; }
+        .mission-vision { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+        .mission-box, .vision-box { padding: 40px; border-radius: var(--radius-xl); }
+        .mission-box { background: var(--primary-pale); border: 2px solid var(--primary-light); }
+        .vision-box { background: var(--teal-pale); border: 2px solid var(--teal-light); }
+        .mission-box h3, .vision-box h3 { font-size: 1.5rem; margin-bottom: 16px; }
+        .mission-box h3 { color: var(--primary); } .vision-box h3 { color: var(--teal); }
+        .mission-box p, .vision-box p { line-height: 1.8; color: var(--dark); opacity: 0.8; }
+
+        /* Team */
+        .team-card { background: var(--white); border-radius: var(--radius-lg); padding: 32px; text-align: center; box-shadow: var(--shadow); transition: all 0.3s; }
+        .team-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+        .team-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; margin: 0 auto 20px; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .team-card h4 { font-size: 1.2rem; margin-bottom: 4px; }
+        .team-role { color: var(--teal); font-weight: 600; font-size: 0.9rem; margin-bottom: 12px; }
+        .team-desc { font-size: 0.9rem; color: var(--dark); opacity: 0.7; line-height: 1.6; }
+
+        /* Partners */
+        .partner-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .partner-item { background: var(--white); border-radius: var(--radius); padding: 32px; text-align: center; box-shadow: var(--shadow-sm); transition: all 0.3s; border: 2px solid var(--gray-light); }
+        .partner-item:hover { border-color: var(--primary-light); transform: translateY(-4px); box-shadow: var(--shadow); }
+        .partner-logo { width: 60px; height: 60px; background: var(--gray-light); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--gray); }
+        .partner-item h4 { font-size: 1rem; color: var(--dark); }
+
+        /* Contact */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .contact-info-item { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+        .contact-icon { width: 48px; height: 48px; background: var(--primary-pale); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: var(--primary); flex-shrink: 0; }
+        .contact-icon svg { width: 24px; height: 24px; }
+        .contact-detail h4 { font-size: 1rem; margin-bottom: 4px; }
+        .contact-detail p { color: var(--gray); font-size: 0.95rem; }
+
+        /* Form */
+        .form-card { background: var(--white); border-radius: var(--radius-xl); padding: 40px; box-shadow: var(--shadow-lg); }
+        .form-card h3 { font-size: 1.3rem; margin-bottom: 24px; color: var(--primary); }
+        .btn-submit { width: 100%; justify-content: center; margin-top: 8px; }
+
+        /* Result */
+        .result-box { background: var(--primary-pale); border-radius: var(--radius); padding: 24px; margin-top: 20px; text-align: center; display: none; }
+        .result-box.show { display: block; animation: fadeInUp 0.4s ease-out; }
+        .result-number { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+        .result-breakdown { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+        .breakdown-item { background: var(--white); padding: 12px; border-radius: 8px; font-size: 0.9rem; }
+        .breakdown-item span { display: block; font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+
+        /* Toast */
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--dark); color: var(--white); padding: 14px 28px; border-radius: var(--radius); box-shadow: var(--shadow-lg); z-index: 999; font-weight: 500; opacity: 0; transition: all 0.4s ease; white-space: nowrap; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* Banner CTA */
+        .banner-cta { background: var(--teal); border-radius: var(--radius-xl); padding: 40px; text-align: center; color: var(--white); margin: 40px 0; }
+        .banner-cta h3 { font-size: 1.5rem; margin-bottom: 12px; color: var(--white); }
+        .banner-cta p { opacity: 0.9; margin-bottom: 20px; }
+
+        .sort-select { padding: 10px 16px; border: 2px solid var(--gray-light); border-radius: var(--radius); font-family: inherit; background: var(--white); cursor: pointer; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container { grid-template-columns: 1fr; text-align: center; }
+            .hero p { margin: 0 auto 32px; }
+            .hero-illustration { order: -1; }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps-container { flex-wrap: wrap; }
+            .steps-container::before { display: none; }
+            .step { flex: 1 1 45%; }
+            .mission-vision { grid-template-columns: 1fr; }
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero h1 { font-size: 2.2rem; }
+            .stats-container { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+            .grid-3, .grid-4, .grid-2 { grid-template-columns: 1fr; }
+            .community-stats { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .partner-grid { grid-template-columns: 1fr; }
+            .event-card { flex-direction: column; }
+            .event-date { flex-direction: row; gap: 8px; padding: 16px; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .gamification-bar { top: auto; bottom: 90px; right: 12px; left: 12px; justify-content: space-between; }
+            .step { flex: 1 1 100%; }
+            .form-row { grid-template-columns: 1fr; }
+            .hero-buttons { justify-content: center; }
+            .filter-tabs { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 8px; }
+            .cookie-banner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <svg class="loading-leaf" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30 5 C20 15, 10 25, 30 45 C50 25, 40 15, 30 5Z" fill="#2D6A1F"/>
+            <path d="M30 15 L30 35" stroke="#C0DD97" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div class="loading-text">Macakka.Id</div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a class="logo" onclick="navigateTo('beranda')">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span class="logo-text"><span class="logo-macakka">Macakka</span><span class="logo-id">.Id</span></span>
+            </a>
+            <ul class="nav-menu">
+                <li><a onclick="navigateTo('panduan')" id="nav-panduan">Panduan</a></li>
+                <li><a onclick="navigateTo('layanan')" id="nav-layanan">Layanan</a></li>
+                <li><a onclick="navigateTo('marketplace')" id="nav-marketplace">Marketplace</a></li>
+                <li><a onclick="navigateTo('komunitas')" id="nav-komunitas">Komunitas</a></li>
+                <li><a onclick="navigateTo('tentang')" id="nav-tentang">Tentang</a></li>
+            </ul>
+            <button class="nav-cta" onclick="showToast('Fitur pendaftaran akan segera hadir!')">Mulai Sekarang</button>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#444441" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a onclick="navigateTo('beranda')">Beranda</a>
+        <a onclick="navigateTo('panduan')">Panduan</a>
+        <a onclick="navigateTo('layanan')">Layanan</a>
+        <a onclick="navigateTo('marketplace')">Marketplace</a>
+        <a onclick="navigateTo('komunitas')">Komunitas</a>
+        <a onclick="navigateTo('tentang')">Tentang</a>
+    </div>
+
+    <!-- Gamification Bar -->
+    <div class="gamification-bar" id="gamificationBar">
+        <span class="level-badge">Pemula Hijau</span>
+        <div>
+            <div class="points-bar"><div class="points-fill"></div></div>
+            <div class="points-text">325 / 500 poin</div>
+        </div>
+    </div>
+
+    <!-- Point Toast -->
+    <div class="point-toast" id="pointToast">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+        </svg>
+        <span>Kamu mendapat 50 poin!</span>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/6281112345678" target="_blank" class="float-wa" aria-label="Chat WhatsApp">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        <span class="float-wa-tooltip">Chat dengan kami</span>
+    </a>
+
+    <!-- Cookie Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+        <p>Macakka.Id menggunakan cookie untuk pengalaman terbaik. Dengan melanjutkan, kamu menyetujui penggunaan cookie.</p>
+        <button onclick="hideCookieBanner()">Mengerti</button>
+    </div>
+
+    <!-- PAGE: BERANDA -->
+    <div class="page active" id="page-beranda">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-pattern"></div>
+            <div class="hero-container">
+                <div class="animate-fade-in-up">
+                    <div class="hero-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2D6A1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                        </svg>
+                        Platform edukasi lingkungan #1 Indonesia
+                    </div>
+                    <h1>Pilah sampahmu, jaga bumi kita bersama</h1>
+                    <p>Platform lengkap untuk edukasi pemilahan sampah, layanan pengelolaan, dan marketplace produk daur ulang. Mulai dari rumah, dampak untuk Indonesia.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="navigateTo('panduan'); addPoints(50);">
+                            Mulai Belajar
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                        <button class="btn btn-outline" onclick="navigateTo('marketplace')">
+                            Lihat Marketplace
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-illustration animate-float">
+                    <svg width="500" height="400" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background Circle -->
+                        <circle cx="250" cy="200" r="180" fill="#C0DD97" opacity="0.3"/>
+                        <circle cx="250" cy="200" r="140" fill="#E1F5EE" opacity="0.5"/>
+
+                        <!-- Recycle Symbol -->
+                        <g transform="translate(250, 180) scale(1.2)">
+                            <path d="M-30 -20 L-10 -40 L30 -20 L20 0 L-20 0 Z" fill="#2D6A1F" opacity="0.9"/>
+                            <path d="M30 20 L10 40 L-30 20 L-20 0 L20 0 Z" fill="#639922" opacity="0.9" transform="rotate(120)"/>
+                            <path d="M-30 20 L-10 40 L30 20 L20 0 L-20 0 Z" fill="#1D9E75" opacity="0.9" transform="rotate(240)"/>
+                        </g>
+
+                        <!-- Trash Bin 1 (Green - Organic) -->
+                        <g transform="translate(120, 280)">
+                            <rect x="0" y="20" width="50" height="70" rx="5" fill="#2D6A1F" opacity="0.9"/>
+                            <rect x="-5" y="15" width="60" height="10" rx="3" fill="#3B6D11"/>
+                            <text x="25" y="55" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Inter">ORGANIK</text>
+                            <circle cx="25" cy="85" r="3" fill="#C0DD97"/>
+                        </g>
+
+                        <!-- Trash Bin 2 (Teal - Anorganic) -->
+                        <g transform="translate(330, 280)">
+                            <rect x="0" y="20" width="50" height="70" rx="5" fill="#1D9E75" opacity="0.9"/>
+                            <rect x="-5" y="15" width="60" height="10" rx="3" fill="#178a63"/>
+                            <text x="25" y="55" text-anchor="middle" fill="white" font-size="9" font-weight="bold" font-family="Inter">ANORGANIK</text>
+                            <circle cx="25" cy="85" r="3" fill="#5DCAA5"/>
+                        </g>
+
+                        <!-- Leaves decoration -->
+                        <path d="M100 100 Q120 80 140 100 Q120 120 100 100Z" fill="#639922" opacity="0.6"/>
+                        <path d="M380 120 Q400 100 420 120 Q400 140 380 120Z" fill="#2D6A1F" opacity="0.5"/>
+                        <path d="M80 250 Q100 230 120 250 Q100 270 80 250Z" fill="#1D9E75" opacity="0.4"/>
+                        <path d="M400 280 Q420 260 440 280 Q420 300 400 280Z" fill="#639922" opacity="0.5"/>
+
+                        <!-- Floating elements -->
+                        <circle cx="150" cy="150" r="8" fill="#C0DD97" opacity="0.7"/>
+                        <circle cx="350" cy="160" r="6" fill="#5DCAA5" opacity="0.6"/>
+                        <circle cx="200" cy="320" r="5" fill="#639922" opacity="0.5"/>
+                        <circle cx="300" cy="330" r="7" fill="#C0DD97" opacity="0.6"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Strip -->
+        <section class="stats-strip">
+            <div class="stats-container">
+                <div class="stat-item reveal">
+                    <span class="stat-number" data-target="12400">0</span>
+                    <span class="stat-label">Pengguna Aktif</span>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-number" data-target="3.2" data-decimal="true">0</span>
+                    <span class="stat-label">Ton Sampah Terkelola</span>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-number" data-target="840">0</span>
+                    <span class="stat-label">Produk Daur Ulang</span>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-number" data-target="150">0</span>
+                    <span class="stat-label">Mitra Bank Sampah</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section features-section">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Fitur Utama</span>
+                    <h2>Apa yang bisa kamu lakukan?</h2>
+                    <p>Tiga pilar utama Macakka.Id untuk membantu kamu mengelola sampah dengan lebih baik</p>
+                </div>
+                <div class="grid-3">
+                    <div class="card feature-card reveal">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+                                <line x1="8" y1="7" x2="16" y2="7"/>
+                                <line x1="8" y1="11" x2="12" y2="11"/>
+                            </svg>
+                        </div>
+                        <h3>Panduan Pemilahan</h3>
+                        <p>Pelajari cara memilah sampah organik, anorganik, B3, dan residu dengan panduan lengkap dan mudah dipahami.</p>
+                    </div>
+                    <div class="card feature-card reveal">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="1" y="3" width="15" height="13"/>
+                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                                <circle cx="5.5" cy="18.5" r="2.5"/>
+                                <circle cx="18.5" cy="18.5" r="2.5"/>
+                            </svg>
+                        </div>
+                        <h3>Jasa Pickup</h3>
+                        <p>Pesan jasa penjemputan sampah terjadwal ke rumahmu. Tim kami akan datang dan mengelola sampahmu dengan benar.</p>
+                    </div>
+                    <div class="card feature-card reveal">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="21" r="1"/>
+                                <circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+                            </svg>
+                        </div>
+                        <h3>Marketplace</h3>
+                        <p>Belanja produk daur ulang dari komunitas kami. Dari kerajinan sampai kompos premium, semua ada di sini.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="section how-it-works">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Cara Kerja</span>
+                    <h2>Mulai dalam 4 langkah mudah</h2>
+                    <p>Ikuti langkah-langkah berikut untuk mulai berkontribusi menjaga lingkungan</p>
+                </div>
+                <div class="steps-container reveal">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>Daftar & Pelajari</h4>
+                        <p>Buat akun gratis dan pelajari cara memilah sampah melalui panduan interaktif kami</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>Pilah Sampah</h4>
+                        <p>Terapkan ilmu yang didapat dengan memilah sampah di rumah sesuai kategori</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>Pesan Pickup</h4>
+                        <p>Jadwalkan penjemputan sampah terpilah dan tim kami akan datang ke rumahmu</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>Dapatkan Poin</h4>
+                        <p>Kumpulkan poin dari setiap aktivitas dan tukarkan di marketplace kami</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="section testimonials">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Testimoni</span>
+                    <h2>Apa kata mereka?</h2>
+                    <p>Pengalaman warga yang sudah bergabung dengan Macakka.Id</p>
+                </div>
+                <div class="grid-3">
+                    <div class="testimonial-card reveal">
+                        <div class="testimonial-avatar">AS</div>
+                        <p class="testimonial-text">"Sejak pakai Macakka.Id, sampah di rumah jadi terkelola dengan baik. Anak-anak juga ikut belajar memilah sampah dari aplikasi ini. Sangat bermanfaat!"</p>
+                        <div class="testimonial-author">Aisyah Sulaiman</div>
+                        <div class="testimonial-location">Makassar, Sulawesi Selatan</div>
+                    </div>
+                    <div class="testimonial-card reveal">
+                        <div class="testimonial-avatar">RB</div>
+                        <p class="testimonial-text">"Jasa pickupnya sangat membantu. Saya tinggal pesan lewat HP, tim datang tepat waktu, dan sampah terpilah saya langsung ditimbang. Dapat poin pula!"</p>
+                        <div class="testimonial-author">Rudi Baharuddin</div>
+                        <div class="testimonial-location">Makassar, Sulawesi Selatan</div>
+                    </div>
+                    <div class="testimonial-card reveal">
+                        <div class="testimonial-avatar">MP</div>
+                        <p class="testimonial-text">"Saya jual kerajinan dari botol bekas di marketplace Macakka.Id. Omset naik 40% sejak bergabung. Platform yang sangat mendukung UMKM ramah lingkungan!"</p>
+                        <div class="testimonial-author">Maya Putri</div>
+                        <div class="testimonial-location">Makassar, Sulawesi Selatan</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="section-container" style="position: relative; z-index: 1;">
+                <h2 class="reveal">Bergabunglah dengan 12.000+ warga yang sudah mulai memilah</h2>
+                <p class="reveal">Setiap langkah kecilmu berdampak besar untuk bumi kita</p>
+                <button class="btn btn-white btn-lg reveal" onclick="showToast('Fitur pendaftaran akan segera hadir!'); addPoints(25);">
+                    Daftar Gratis
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: PANDUAN -->
+    <div class="page" id="page-panduan">
+        <div class="page-header">
+            <div class="section-container">
+                <h1>Panduan Pemilahan Sampah</h1>
+                <p>Pelajari cara memilah sampah dengan benar sesuai kategori untuk pengelolaan yang optimal</p>
+            </div>
+        </div>
+
+        <section class="section" style="padding-top: 40px;">
+            <div class="section-container">
+                <!-- Filter Tabs -->
+                <div class="filter-tabs reveal">
+                    <button class="filter-tab active" onclick="filterCategories('all', this)">Semua</button>
+                    <button class="filter-tab" onclick="filterCategories('organic', this)">Organik</button>
+                    <button class="filter-tab" onclick="filterCategories('anorganic', this)">Anorganik</button>
+                    <button class="filter-tab" onclick="filterCategories('b3', this)">B3</button>
+                    <button class="filter-tab" onclick="filterCategories('residu', this)">Residu</button>
+                </div>
+
+                <!-- Category Grid -->
+                <div class="grid-2" id="categoryGrid">
+                    <div class="category-card organic reveal" data-category="organic">
+                        <div class="category-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                                <path d="M12 6v12M8 10c0-2 2-4 4-4s4 2 4 4-2 4-4 4"/>
+                            </svg>
+                        </div>
+                        <h3>Sampah Organik</h3>
+                        <div class="category-examples">
+                            <strong>Contoh:</strong> Sisa makanan, sayuran, buah, daun kering, kulit telur, ampas kopi
+                        </div>
+                        <div class="category-examples">
+                            <strong>Cara Pengelolaan:</strong> Composting, biogas, atau dijadikan pupuk kompos untuk tanaman
+                        </div>
+                        <span class="category-badge">Bisa dijadikan kompos</span>
+                    </div>
+
+                    <div class="category-card anorganic reveal" data-category="anorganic">
+                        <div class="category-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                                <line x1="12" y1="22.08" x2="12" y2="12"/>
+                            </svg>
+                        </div>
+                        <h3>Sampah Anorganik</h3>
+                        <div class="category-examples">
+                            <strong>Contoh:</strong> Plastik, kaca, logam, kertas, karton, kaleng aluminium
+                        </div>
+                        <div class="category-examples">
+                            <strong>Cara Pengelolaan:</strong> Daur ulang, jual ke pengepul, atau kreasikan jadi kerajinan
+                        </div>
+                        <span class="category-badge">Bernilai ekonomi</span>
+                    </div>
+
+                    <div class="category-card b3 reveal" data-category="b3">
+                        <div class="category-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <h3>Sampah B3 (Bahan Berbahaya & Beracun)</h3>
+                        <div class="category-examples">
+                            <strong>Contoh:</strong> Baterai bekas, lampu neon, cat, obat kadaluarsa, limbah elektronik
+                        </div>
+                        <div class="category-examples">
+                            <strong>Cara Pengelolaan:</strong> Antar ke titik pengumpulan khusus B3. Jangan dibuang sembarangan!
+                        </div>
+                        <span class="category-badge">Perlu penanganan khusus</span>
+                    </div>
+
+                    <div class="category-card residu reveal" data-category="residu">
+                        <div class="category-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                            </svg>
+                        </div>
+                        <h3>Sampah Residu</h3>
+                        <div class="category-examples">
+                            <strong>Contoh:</strong> Pembalut, tisu bekas, puntung rokok, popok sekali pakai, styrofoam
+                        </div>
+                        <div class="category-examples">
+                            <strong>Cara Pengelolaan:</strong> Dibuang ke TPA (Tempat Pemrosesan Akhir) dengan pengelolaan sanitary landfill
+                        </div>
+                        <span class="category-badge">Tidak bisa didaur ulang</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tutorial Video Section -->
+        <section class="section" style="background: var(--cream);">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Tutorial Video</span>
+                    <h2>Pelajari lewat video</h2>
+                    <p>Tutorial praktis untuk memilah sampah dengan benar</p>
+                </div>
+                <div class="grid-3">
+                    <div class="video-card reveal">
+                        <div class="video-thumbnail">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polygon points="10 8 16 12 10 16 10 8"/>
+                            </svg>
+                            <span class="video-duration">5:32</span>
+                        </div>
+                        <div class="video-info">
+                            <h4>Cara Memilah Sampah di Rumah</h4>
+                            <p>Panduan lengkap untuk pemula</p>
+                        </div>
+                    </div>
+                    <div class="video-card reveal">
+                        <div class="video-thumbnail" style="background: var(--teal);">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polygon points="10 8 16 12 10 16 10 8"/>
+                            </svg>
+                            <span class="video-duration">8:15</span>
+                        </div>
+                        <div class="video-info">
+                            <h4>Membuat Kompos dari Sampah Organik</h4>
+                            <p>Langkah demi langkah membuat pupuk kompos</p>
+                        </div>
+                    </div>
+                    <div class="video-card reveal">
+                        <div class="video-thumbnail" style="background: var(--primary-medium);">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polygon points="10 8 16 12 10 16 10 8"/>
+                            </svg>
+                            <span class="video-duration">6:45</span>
+                        </div>
+                        <div class="video-info">
+                            <h4>Mengenal Simbol Daur Ulang pada Kemasan</h4>
+                            <p>Pahami kode plastik dan simbol daur ulang</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculator Section -->
+        <section class="section">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Kalkulator</span>
+                    <h2>Kalkulator Sampah Interaktif</h2>
+                    <p>Hitung estimasi sampah yang dihasilkan keluargamu per minggu</p>
+                </div>
+                <div class="calculator-box reveal">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Jumlah Anggota Keluarga</label>
+                            <input type="number" id="familyMembers" min="1" max="20" value="4" placeholder="Contoh: 4">
+                        </div>
+                        <div class="form-group">
+                            <label>Periode (Hari)</label>
+                            <input type="number" id="calcDays" min="1" max="30" value="7" placeholder="Contoh: 7">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-submit" onclick="calculateWaste()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/>
+                            <line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/>
+                        </svg>
+                        Hitung Estimasi
+                    </button>
+                    <div class="result-box" id="calcResult">
+                        <div class="result-number" id="totalWaste">0 kg</div>
+                        <p>Estimasi sampah per minggu</p>
+                        <div class="result-breakdown">
+                            <div class="breakdown-item">
+                                <span id="organicWaste">0 kg</span>
+                                Organik (60%)
+                            </div>
+                            <div class="breakdown-item">
+                                <span id="anorganicWaste">0 kg</span>
+                                Anorganik (25%)
+                            </div>
+                            <div class="breakdown-item">
+                                <span id="b3Waste">0 kg</span>
+                                B3 (5%)
+                            </div>
+                            <div class="breakdown-item">
+                                <span id="residuWaste">0 kg</span>
+                                Residu (10%)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Banner CTA -->
+        <section class="section" style="padding-top: 0;">
+            <div class="section-container">
+                <div class="banner-cta reveal">
+                    <h3>Sudah paham cara memilah?</h3>
+                    <p>Pesan jasa pickup sekarang dan dapatkan poin untuk setiap kg sampah terpilah!</p>
+                    <button class="btn btn-white" onclick="navigateTo('layanan'); addPoints(30);">
+                        Pesan Jasa Pickup
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: LAYANAN -->
+    <div class="page" id="page-layanan">
+        <div class="page-header">
+            <div class="section-container">
+                <h1>Layanan Pengelolaan Sampah</h1>
+                <p>Solusi praktis untuk pengelolaan sampah rumah tangga dengan layanan terpercaya</p>
+            </div>
+        </div>
+
+        <section class="section" style="padding-top: 40px;">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Layanan Kami</span>
+                    <h2>Pilih layanan yang sesuai kebutuhanmu</h2>
+                </div>
+                <div class="grid-3">
+                    <div class="service-card reveal">
+                        <div class="service-icon" style="background: var(--primary-pale); color: var(--primary);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="1" y="3" width="15" height="13"/>
+                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                                <circle cx="5.5" cy="18.5" r="2.5"/>
+                                <circle cx="18.5" cy="18.5" r="2.5"/>
+                            </svg>
+                        </div>
+                        <h3>Jemput Sampah</h3>
+                        <p>Penjemputan sampah terjadwal langsung ke rumahmu. Tim kami datang dengan kendaraan khusus dan alat timbang.</p>
+                        <div class="service-price">Rp 25.000<span>/pickup</span></div>
+                        <button class="btn btn-primary" onclick="showToast('Form pemesanan telah dibuka!'); scrollToForm(); addPoints(40);">
+                            Pesan Sekarang
+                        </button>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon" style="background: var(--teal-pale); color: var(--teal);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <h3>Bank Sampah</h3>
+                        <p>Antar sampah terpilahmu ke titik bank sampah terdekat dan dapatkan poin yang bisa ditukar dengan berbagai hadiah.</p>
+                        <div class="service-price">Gratis<span>/setoran</span></div>
+                        <button class="btn btn-teal" onclick="showToast('Menampilkan peta lokasi...'); addPoints(20);">
+                            Cari Lokasi
+                        </button>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon" style="background: var(--amber-light); color: var(--amber);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                            </svg>
+                        </div>
+                        <h3>Konsultasi Pengelolaan</h3>
+                        <p>Tanya jawab dengan relawan lingkungan kami. Dapatkan saran personal untuk pengelolaan sampah di rumahmu.</p>
+                        <div class="service-price">Gratis<span>/sesi</span></div>
+                        <button class="btn btn-amber" onclick="showToast('Menghubungkan ke relawan...'); addPoints(15);">
+                            Mulai Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="section" style="background: var(--cream);">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Lokasi</span>
+                    <h2>Peta Titik Pengumpulan</h2>
+                    <p>Temukan lokasi bank sampah dan titik pengumpulan B3 terdekat di Makassar</p>
+                </div>
+                <div class="map-container reveal">
+                    <svg class="map-svg" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="800" height="400" fill="#F4FAF0"/>
+
+                        <!-- Roads -->
+                        <line x1="100" y1="200" x2="700" y2="200" stroke="#C0DD97" stroke-width="8" stroke-linecap="round"/>
+                        <line x1="400" y1="50" x2="400" y2="350" stroke="#C0DD97" stroke-width="8" stroke-linecap="round"/>
+                        <line x1="200" y1="100" x2="600" y2="300" stroke="#C0DD97" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+                        <line x1="600" y1="100" x2="200" y2="300" stroke="#C0DD97" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+
+                        <!-- Areas -->
+                        <ellipse cx="200" cy="150" rx="80" ry="60" fill="#E1F5EE" opacity="0.5"/>
+                        <ellipse cx="600" cy="250" rx="100" ry="70" fill="#E1F5EE" opacity="0.5"/>
+                        <ellipse cx="400" cy="100" rx="70" ry="50" fill="#E1F5EE" opacity="0.5"/>
+
+                        <!-- Location Pins -->
+                        <g transform="translate(180, 140)">
+                            <path d="M0 0 C-15 -15 -15 -35 0 -50 C15 -35 15 -15 0 0Z" fill="#2D6A1F"/>
+                            <circle cx="0" cy="-30" r="8" fill="white"/>
+                            <text x="0" y="15" text-anchor="middle" fill="#2D6A1F" font-size="10" font-weight="bold">Bank Sampah Tamalanrea</text>
+                        </g>
+
+                        <g transform="translate(580, 230)">
+                            <path d="M0 0 C-15 -15 -15 -35 0 -50 C15 -35 15 -15 0 0Z" fill="#1D9E75"/>
+                            <circle cx="0" cy="-30" r="8" fill="white"/>
+                            <text x="0" y="15" text-anchor="middle" fill="#1D9E75" font-size="10" font-weight="bold">TPS Panakkukang</text>
+                        </g>
+
+                        <g transform="translate(380, 90)">
+                            <path d="M0 0 C-15 -15 -15 -35 0 -50 C15 -35 15 -15 0 0Z" fill="#F59E0B"/>
+                            <circle cx="0" cy="-30" r="8" fill="white"/>
+                            <text x="0" y="15" text-anchor="middle" fill="#B45309" font-size="10" font-weight="bold">Pengumpulan B3 Maros</text>
+                        </g>
+
+                        <g transform="translate(320, 280)">
+                            <path d="M0 0 C-15 -15 -15 -35 0 -50 C15 -35 15 -15 0 0Z" fill="#2D6A1F"/>
+                            <circle cx="0" cy="-30" r="8" fill="white"/>
+                            <text x="0" y="15" text-anchor="middle" fill="#2D6A1F" font-size="10" font-weight="bold">Bank Sampah Rappocini</text>
+                        </g>
+
+                        <g transform="translate(520, 120)">
+                            <path d="M0 0 C-15 -15 -15 -35 0 -50 C15 -35 15 -15 0 0Z" fill="#1D9E75"/>
+                            <circle cx="0" cy="-30" r="8" fill="white"/>
+                            <text x="0" y="15" text-anchor="middle" fill="#1D9E75" font-size="10" font-weight="bold">TPS Tallo</text>
+                        </g>
+
+                        <!-- Legend -->
+                        <rect x="20" y="340" width="200" height="50" rx="8" fill="white" opacity="0.9"/>
+                        <circle cx="40" cy="355" r="6" fill="#2D6A1F"/><text x="55" y="359" fill="#444441" font-size="10">Bank Sampah</text>
+                        <circle cx="40" cy="375" r="6" fill="#1D9E75"/><text x="55" y="379" fill="#444441" font-size="10">TPS</text>
+                        <circle cx="120" cy="355" r="6" fill="#F59E0B"/><text x="135" y="359" fill="#444441" font-size="10">B3</text>
+                    </svg>
+                </div>
+
+                <!-- Location List -->
+                <div class="location-list reveal">
+                    <div class="location-item">
+                        <div class="location-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="location-info">
+                            <h4>Bank Sampah Tamalanrea Indah</h4>
+                            <p>Jl. Perintis Kemerdekaan KM.10, Tamalanrea, Makassar</p>
+                            <span class="location-hours">Senin-Sabtu: 08.00 - 16.00 WITA</span>
+                        </div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon" style="background: var(--teal-pale); color: var(--teal);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="location-info">
+                            <h4>TPS Panakkukang Mandiri</h4>
+                            <p>Jl. Boulevard No.45, Panakkukang, Makassar</p>
+                            <span class="location-hours">Setiap hari: 07.00 - 18.00 WITA</span>
+                        </div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon" style="background: var(--amber-light); color: var(--amber);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="location-info">
+                            <h4>Tempat Pengumpulan B3 Maros</h4>
+                            <p>Jl. Poros Maros-Makassar KM.12, Maros, Sulawesi Selatan</p>
+                            <span class="location-hours">Senin-Jumat: 09.00 - 15.00 WITA</span>
+                        </div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="location-info">
+                            <h4>Bank Sampah Rappocini Jaya</h4>
+                            <p>Jl. Andi Tonro No.88, Rappocini, Makassar</p>
+                            <span class="location-hours">Senin-Sabtu: 08.00 - 17.00 WITA</span>
+                        </div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon" style="background: var(--teal-pale); color: var(--teal);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="location-info">
+                            <h4>TPS Tallo Baru</h4>
+                            <p>Jl. Urip Sumoharjo No.123, Tallo, Makassar</p>
+                            <span class="location-hours">Setiap hari: 06.00 - 19.00 WITA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pickup Form -->
+        <section class="section" id="pickupForm">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Pemesanan</span>
+                    <h2>Formulir Pesan Pickup</h2>
+                    <p>Isi formulir di bawah untuk menjadwalkan penjemputan sampah</p>
+                </div>
+                <div class="form-card reveal" style="max-width: 700px; margin: 0 auto;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nama Lengkap</label>
+                            <input type="text" id="pickupName" placeholder="Masukkan nama lengkap">
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor HP</label>
+                            <input type="tel" id="pickupPhone" placeholder="Contoh: 08123456789">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Lengkap</label>
+                        <textarea id="pickupAddress" rows="3" placeholder="Masukkan alamat lengkap dengan RT/RW"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tanggal Pickup</label>
+                            <input type="date" id="pickupDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Waktu Pickup</label>
+                            <select id="pickupTime">
+                                <option value="">Pilih waktu</option>
+                                <option value="pagi">Pagi (08.00 - 11.00)</option>
+                                <option value="siang">Siang (11.00 - 14.00)</option>
+                                <option value="sore">Sore (14.00 - 17.00)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Sampah</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" value="organik"> Organik
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" value="plastik"> Plastik
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" value="kertas"> Kertas/Karton
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" value="logam"> Logam/Kaleng
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" value="kaca"> Kaca/Botol
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" value="elektronik"> Elektronik
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Catatan Tambahan</label>
+                        <textarea id="pickupNote" rows="2" placeholder="Catatan khusus untuk tim pickup (opsional)"></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-submit" onclick="submitPickupForm()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Kirim Pemesanan
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Preparation Timeline -->
+        <section class="section" style="background: var(--cream);">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Persiapan</span>
+                    <h2>Cara Menyiapkan Sampah</h2>
+                    <p>Ikuti langkah-langkah ini agar proses pickup berjalan lancar</p>
+                </div>
+                <div class="timeline reveal" style="max-width: 700px; margin: 0 auto;">
+                    <div class="timeline-item">
+                        <h4>Pisahkan Sampah 2-3 Hari Sebelum Pickup</h4>
+                        <p>Mulai pisahkan sampah organik dan anorganik minimal 2-3 hari sebelum jadwal pickup untuk memudahkan proses.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Masukkan ke Kantong Berbeda per Kategori</h4>
+                        <p>Gunakan kantong plastik atau kantong kain yang berbeda warna untuk setiap kategori sampah agar mudah dikenali.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Tempatkan di Depan Rumah Sesuai Jadwal</h4>
+                        <p>Letakkan sampah di depan rumah atau tempat yang mudah diakses tim pickup sesuai waktu yang dijadwalkan.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Tim Kami Akan Datang dan Menimbang</h4>
+                        <p>Tim Macakka.Id akan datang tepat waktu, menimbang sampahmu, dan memberikan bukti setoran.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Poin Masuk ke Akun Kamu</h4>
+                        <p>Setelah sampah diterima, poin akan otomatis masuk ke akunmu dan bisa ditukar di marketplace!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: MARKETPLACE -->
+    <div class="page" id="page-marketplace">
+        <div class="page-header">
+            <div class="section-container">
+                <h1>Marketplace Produk Daur Ulang</h1>
+                <p>Temukan produk kerajinan, kompos, dan barang ramah lingkungan dari komunitas Macakka.Id</p>
+            </div>
+        </div>
+
+        <section class="section" style="padding-top: 40px;">
+            <div class="section-container">
+                <!-- Search & Filter -->
+                <div class="search-bar reveal">
+                    <div class="search-input">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" id="productSearch" placeholder="Cari produk daur ulang..." onkeyup="searchProducts()">
+                    </div>
+                    <select class="sort-select" id="sortSelect" onchange="sortProducts()">
+                        <option value="newest">Terbaru</option>
+                        <option value="popular">Terlaris</option>
+                        <option value="price-low">Harga Terendah</option>
+                        <option value="price-high">Harga Tertinggi</option>
+                    </select>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="filter-tabs reveal">
+                    <button class="filter-tab active" onclick="filterProducts('all', this)">Semua</button>
+                    <button class="filter-tab" onclick="filterProducts('kerajinan', this)">Kerajinan</button>
+                    <button class="filter-tab" onclick="filterProducts('furnitur', this)">Furnitur</button>
+                    <button class="filter-tab" onclick="filterProducts('kompos', this)">Kompos & Pupuk</button>
+                    <button class="filter-tab" onclick="filterProducts('fashion', this)">Fashion</button>
+                    <button class="filter-tab" onclick="filterProducts('peralatan', this)">Peralatan Rumah</button>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="grid-4" id="productsGrid">
+                    <div class="product-card reveal" data-category="kerajinan" data-price="75000" data-popular="95">
+                        <div class="product-image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                            <span class="product-badge">Daur Ulang</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar">AR</div>
+                                <span>Andi Rahman · Makassar</span>
+                            </div>
+                            <h4>Pot Tanaman dari Ban Bekas</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">5.0 (24 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 75.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="fashion" data-price="120000" data-popular="88">
+                        <div class="product-image" style="background: var(--teal-pale);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                                <line x1="3" y1="6" x2="21" y2="6"/>
+                                <path d="M16 10a4 4 0 01-8 0"/>
+                            </svg>
+                            <span class="product-badge">Ramah Lingkungan</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar" style="background: var(--teal-pale); color: var(--teal);">MP</div>
+                                <span>Maya Putri · Makassar</span>
+                            </div>
+                            <h4>Tas Anyam dari Plastik Kresek</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">4.9 (56 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 120.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="kompos" data-price="45000" data-popular="92">
+                        <div class="product-image" style="background: var(--amber-light);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                                <path d="M12 6v12M8 10c0-2 2-4 4-4s4 2 4 4-2 4-4 4"/>
+                            </svg>
+                            <span class="product-badge">Daur Ulang</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar" style="background: var(--amber-light); color: #B45309;">BS</div>
+                                <span>Budi Santoso · Maros</span>
+                            </div>
+                            <h4>Kompos Premium 5kg</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">4.8 (89 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 45.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="peralatan" data-price="185000" data-popular="76">
+                        <div class="product-image" style="background: #FEF3C7;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="3" y1="9" x2="21" y2="9"/>
+                                <line x1="9" y1="21" x2="9" y2="9"/>
+                            </svg>
+                            <span class="product-badge">Ramah Lingkungan</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar" style="background: #FEF3C7; color: #B45309;">DF</div>
+                                <span>Dewi Fitriani · Makassar</span>
+                            </div>
+                            <h4>Lampu Hias dari Botol Kaca</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-text">4.7 (32 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 185.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="furnitur" data-price="350000" data-popular="82">
+                        <div class="product-image" style="background: #E1F5EE;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 9v11a2 2 0 01-2 2H6a2 2 0 01-2-2V9"/>
+                                <path d="M9 22V12h6v10"/>
+                                <path d="M2 10.6L12 2l10 8.6"/>
+                            </svg>
+                            <span class="product-badge">Daur Ulang</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar" style="background: var(--teal-pale); color: var(--teal);">HY</div>
+                                <span>Hendra Yusran · Makassar</span>
+                            </div>
+                            <h4>Kursi Mini dari Palet Bekas</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">4.9 (41 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 350.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="kerajinan" data-price="55000" data-popular="70">
+                        <div class="product-image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/>
+                            </svg>
+                            <span class="product-badge">Ramah Lingkungan</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar">NS</div>
+                                <span>Nina Sari · Makassar</span>
+                            </div>
+                            <h4>Gantungan Kunci dari Tutup Botol</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-text">4.6 (18 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 55.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="kompos" data-price="85000" data-popular="85">
+                        <div class="product-image" style="background: var(--amber-light);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                            <span class="product-badge">Daur Ulang</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar" style="background: var(--amber-light); color: #B45309;">FK</div>
+                                <span>Fajar Kurnia · Gowa</span>
+                            </div>
+                            <h4>Pupuk Organik Cair 1 Liter</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">4.8 (67 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 85.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="fashion" data-price="95000" data-popular="78">
+                        <div class="product-image" style="background: var(--teal-pale);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.38 3.4a1.6 1.6 0 00-1.97-.5L3.41 8.58a1.6 1.6 0 00-.5 2.57l3.54 3.54a1.6 1.6 0 002.57.5l14.99-6.68a1.6 1.6 0 00.5-1.97L20.38 3.4z"/>
+                                <path d="M10 21l4-10.5"/>
+                                <path d="M16.5 8.5L21 4"/>
+                            </svg>
+                            <span class="product-badge">Ramah Lingkungan</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar" style="background: var(--teal-pale); color: var(--teal);">RL</div>
+                                <span>Rina Lestari · Makassar</span>
+                            </div>
+                            <h4>Dompet dari Kain Perca</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-text">4.7 (29 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 95.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="peralatan" data-price="65000" data-popular="65">
+                        <div class="product-image" style="background: #FEF3C7;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                            <span class="product-badge">Daur Ulang</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar" style="background: #FEF3C7; color: #B45309;">AW</div>
+                                <span>Ahmad Wijaya · Maros</span>
+                            </div>
+                            <h4>Tempat Pensil dari Kaleng Susu</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-text">4.5 (15 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 65.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="furnitur" data-price="275000" data-popular="80">
+                        <div class="product-image" style="background: #E1F5EE;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="3" y1="9" x2="21" y2="9"/>
+                                <line x1="9" y1="21" x2="9" y2="9"/>
+                            </svg>
+                            <span class="product-badge">Ramah Lingkungan</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar" style="background: var(--teal-pale); color: var(--teal);">SP</div>
+                                <span>Siti Purwanti · Makassar</span>
+                            </div>
+                            <h4>Rak Buku dari Kardus Bekas</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">4.8 (38 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 275.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="kerajinan" data-price="150000" data-popular="72">
+                        <div class="product-image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/>
+                            </svg>
+                            <span class="product-badge">Daur Ulang</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar">JK</div>
+                                <span>Joko Kusumo · Makassar</span>
+                            </div>
+                            <h4>Vas Bunga dari Botol Plastik</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-text">4.6 (22 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 150.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal" data-category="kompos" data-price="125000" data-popular="90">
+                        <div class="product-image" style="background: var(--amber-light);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                                <path d="M12 6v12M8 10c0-2 2-4 4-4s4 2 4 4-2 4-4 4"/>
+                            </svg>
+                            <span class="product-badge">Ramah Lingkungan</span>
+                            <button class="product-wishlist" onclick="toggleWishlist(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-seller">
+                                <div class="product-seller-avatar" style="background: var(--amber-light); color: #B45309;">YN</div>
+                                <span>Yudi Nugroho · Gowa</span>
+                            </div>
+                            <h4>Starter Kit Kompos Rumahan</h4>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">4.9 (103 ulasan)</span>
+                            </div>
+                            <div class="product-price">Rp 125.000</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showToast('Produk ditambahkan ke keranjang!'); addPoints(10);">Beli</button>
+                                <button class="btn btn-gray btn-sm" onclick="showToast('Produk disimpan!')">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top Sellers -->
+        <section class="section" style="background: var(--cream);">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Penjual Unggulan</span>
+                    <h2>Penjual Terpercaya</h2>
+                    <p>Berbelanja dari penjual dengan rating terbaik</p>
+                </div>
+                <div class="grid-3">
+                    <div class="seller-card reveal">
+                        <div class="seller-avatar">YN</div>
+                        <div class="seller-info">
+                            <h4>Yudi Nugroho</h4>
+                            <p>24 Produk · Gowa</p>
+                        </div>
+                        <div class="seller-rating">
+                            <span class="stars">★★★★★</span>
+                            <p style="font-size: 0.8rem; color: var(--gray);">4.9</p>
+                        </div>
+                    </div>
+                    <div class="seller-card reveal">
+                        <div class="seller-avatar" style="background: var(--teal);">MP</div>
+                        <div class="seller-info">
+                            <h4>Maya Putri</h4>
+                            <p>18 Produk · Makassar</p>
+                        </div>
+                        <div class="seller-rating">
+                            <span class="stars">★★★★★</span>
+                            <p style="font-size: 0.8rem; color: var(--gray);">4.9</p>
+                        </div>
+                    </div>
+                    <div class="seller-card reveal">
+                        <div class="seller-avatar" style="background: var(--primary-medium);">FK</div>
+                        <div class="seller-info">
+                            <h4>Fajar Kurnia</h4>
+                            <p>31 Produk · Gowa</p>
+                        </div>
+                        <div class="seller-rating">
+                            <span class="stars">★★★★★</span>
+                            <p style="font-size: 0.8rem; color: var(--gray);">4.8</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seller CTA -->
+        <section class="section" style="padding-top: 0;">
+            <div class="section-container">
+                <div class="banner-cta reveal">
+                    <h3>Punya kerajinan dari bahan daur ulang?</h3>
+                    <p>Jual produkmu di Macakka.Id dan jangkau ribuan pembeli yang peduli lingkungan</p>
+                    <button class="btn btn-white" onclick="showToast('Pendaftaran penjual akan segera dibuka!'); addPoints(50);">
+                        Daftar Jadi Penjual
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: KOMUNITAS -->
+    <div class="page" id="page-komunitas">
+        <div class="page-header">
+            <div class="section-container">
+                <h1>Komunitas Macakka.Id</h1>
+                <p>Bergabung dengan komunitas peduli lingkungan terbesar di Indonesia</p>
+            </div>
+        </div>
+
+        <section class="section" style="padding-top: 40px;">
+            <div class="section-container">
+                <!-- Community Stats -->
+                <div class="community-stats reveal">
+                    <div class="community-stat">
+                        <span class="community-stat-number" data-target="12400">0</span>
+                        <div class="community-stat-label">Anggota</div>
+                    </div>
+                    <div class="community-stat">
+                        <span class="community-stat-number" data-target="3200">0</span>
+                        <div class="community-stat-label">Diskusi</div>
+                    </div>
+                    <div class="community-stat">
+                        <span class="community-stat-number" data-target="850">0</span>
+                        <div class="community-stat-label">Tips Dibagikan</div>
+                    </div>
+                    <div class="community-stat">
+                        <span class="community-stat-number" data-target="48">0</span>
+                        <div class="community-stat-label">Kota</div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="filter-tabs reveal">
+                    <button class="filter-tab active" onclick="switchTab('diskusi', this)">Diskusi Terbaru</button>
+                    <button class="filter-tab" onclick="switchTab('tips', this)">Tips & Trik</button>
+                    <button class="filter-tab" onclick="switchTab('galeri', this)">Galeri Hasil</button>
+                    <button class="filter-tab" onclick="switchTab('event', this)">Event</button>
+                </div>
+
+                <!-- Tab: Diskusi -->
+                <div class="tab-content active" id="tab-diskusi">
+                    <div class="thread-card reveal">
+                        <div class="thread-header">
+                            <div class="thread-avatar" style="background: var(--primary);">AS</div>
+                            <div class="thread-meta">
+                                <h4>Aisyah Sulaiman</h4>
+                                <span>2 jam lalu · Makassar</span>
+                            </div>
+                        </div>
+                        <span class="thread-tag organik">Organik</span>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: var(--dark);">Cara buat kompos dari sisa nasi yang benar?</h3>
+                        <p class="thread-summary">Saya sudah coba beberapa kali tapi komposnya selalu bau. Apakah ada tips khusus untuk mengkompos sisa nasi? Mohon pencerahannya teman-teman.</p>
+                        <div class="thread-footer">
+                            <div class="thread-stats">
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                                    12 balasan
+                                </span>
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+                                    8 suka
+                                </span>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="showToast('Bergabung dalam diskusi!'); addPoints(15);">Ikut Diskusi</button>
+                        </div>
+                    </div>
+
+                    <div class="thread-card reveal">
+                        <div class="thread-header">
+                            <div class="thread-avatar" style="background: var(--amber);">RB</div>
+                            <div class="thread-meta">
+                                <h4>Rudi Baharuddin</h4>
+                                <span>5 jam lalu · Makassar</span>
+                            </div>
+                        </div>
+                        <span class="thread-tag b3">B3</span>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: var(--dark);">Dimana buang baterai bekas di Makassar?</h3>
+                        <p class="thread-summary">Saya punya banyak baterai bekas remote dan mainan anak. Sudah kumpulkan 2 bulan tapi bingung mau buang ke mana. Ada yang tahu titik pengumpulan B3 di Makassar?</p>
+                        <div class="thread-footer">
+                            <div class="thread-stats">
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                                    18 balasan
+                                </span>
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+                                    24 suka
+                                </span>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="showToast('Bergabung dalam diskusi!'); addPoints(15);">Ikut Diskusi</button>
+                        </div>
+                    </div>
+
+                    <div class="thread-card reveal">
+                        <div class="thread-header">
+                            <div class="thread-avatar" style="background: var(--teal);">DP</div>
+                            <div class="thread-meta">
+                                <h4>Dewi Pratiwi</h4>
+                                <span>1 hari lalu · Makassar</span>
+                            </div>
+                        </div>
+                        <span class="thread-tag umum">Umum</span>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: var(--dark);">Tips pilah sampah untuk keluarga dengan anak kecil</h3>
+                        <p class="thread-summary">Punya anak usia 3 dan 5 tahun. Mau ajarkan memilah sampah tapi bingung cara yang tepat. Ada yang punya pengalaman serupa? Bagaimana cara menyampaikannya agar anak paham dan tertarik?</p>
+                        <div class="thread-footer">
+                            <div class="thread-stats">
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                                    34 balasan
+                                </span>
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+                                    45 suka
+                                </span>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="showToast('Bergabung dalam diskusi!'); addPoints(15);">Ikut Diskusi</button>
+                        </div>
+                    </div>
+
+                    <div class="thread-card reveal">
+                        <div class="thread-header">
+                            <div class="thread-avatar" style="background: var(--primary-medium);">HY</div>
+                            <div class="thread-meta">
+                                <h4>Hendra Yusran</h4>
+                                <span>2 hari lalu · Makassar</span>
+                            </div>
+                        </div>
+                        <span class="thread-tag umum">Umum</span>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: var(--dark);">Pengalaman pertama pakai jasa pickup Macakka.Id</h3>
+                        <p class="thread-summary">Baru pertama kali pakai jasa pickup kemarin. Timnya datang tepat waktu, ramah, dan prosesnya cepat. Dapat 120 poin dari 8kg sampah anorganik. Recommended banget!</p>
+                        <div class="thread-footer">
+                            <div class="thread-stats">
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                                    28 balasan
+                                </span>
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+                                    56 suka
+                                </span>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="showToast('Bergabung dalam diskusi!'); addPoints(15);">Ikut Diskusi</button>
+                        </div>
+                    </div>
+
+                    <div class="thread-card reveal">
+                        <div class="thread-header">
+                            <div class="thread-avatar" style="background: var(--teal);">SN</div>
+                            <div class="thread-meta">
+                                <h4>Siti Nurhaliza</h4>
+                                <span>3 hari lalu · Makassar</span>
+                            </div>
+                        </div>
+                        <span class="thread-tag plastik">Plastik</span>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: var(--dark);">Plastik PP dan PE itu bedanya apa ya?</h3>
+                        <p class="thread-summary">Saya lihat di kemasan ada kode PP dan PE. Apa bedanya? Yang mana yang lebih mudah didaur ulang? Mohon penjelasannya.</p>
+                        <div class="thread-footer">
+                            <div class="thread-stats">
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                                    15 balasan
+                                </span>
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+                                    19 suka
+                                </span>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="showToast('Bergabung dalam diskusi!'); addPoints(15);">Ikut Diskusi</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Tips & Trik -->
+                <div class="tab-content" id="tab-tips">
+                    <div class="grid-3">
+                        <div class="card reveal">
+                            <div class="card-icon" style="background: var(--primary-pale); color: var(--primary);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                            </div>
+                            <h3>5 Cara Mengurangi Sampah Plastik</h3>
+                            <p>Tips praktis untuk mengurangi penggunaan plastik sekali pakai dalam kehidupan sehari-hari.</p>
+                        </div>
+                        <div class="card reveal">
+                            <div class="card-icon" style="background: var(--teal-pale); color: var(--teal);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v12M8 10c0-2 2-4 4-4s4 2 4 4-2 4-4 4"/></svg>
+                            </div>
+                            <h3>Panduan Kompos untuk Pemula</h3>
+                            <p>Langkah demi langkah membuat kompos sempurna dari sampah dapurmu.</p>
+                        </div>
+                        <div class="card reveal">
+                            <div class="card-icon" style="background: var(--amber-light); color: var(--amber);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            </div>
+                            <h3>DIY: Kerajinan dari Botol Plastik</h3>
+                            <p>Ide kreatif mengubah botol plastik bekas menjadi barang bernilai jual.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Galeri -->
+                <div class="tab-content" id="tab-galeri">
+                    <div class="gallery-grid reveal">
+                        <div class="gallery-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            <p>Kompos hasil 2 bulan</p>
+                        </div>
+                        <div class="gallery-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            <p>Tas anyam dari plastik</p>
+                        </div>
+                        <div class="gallery-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            <p>Sampah terpilah rapi</p>
+                        </div>
+                        <div class="gallery-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            <p>Pot dari ban bekas</p>
+                        </div>
+                        <div class="gallery-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            <p>Lampu hias botol</p>
+                        </div>
+                        <div class="gallery-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            <p>Workshop kompos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Event -->
+                <div class="tab-content" id="tab-event">
+                    <div class="grid-2">
+                        <div class="event-card reveal">
+                            <div class="event-date">
+                                <span class="event-date-day">15</span>
+                                <span class="event-date-month">Juni</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Webinar: "Kompos di Rumah Sendiri"</h4>
+                                <p>Pelajari teknik kompos tingkat lanjut dari ahli lingkungan. Cocok untuk yang sudah mulai berkompos!</p>
+                                <span class="event-type online">Online</span>
+                                <button class="btn btn-primary btn-sm" style="margin-top: 12px;" onclick="showToast('Pendaftaran webinar dibuka!'); addPoints(30);">Daftar Sekarang</button>
+                            </div>
+                        </div>
+                        <div class="event-card reveal">
+                            <div class="event-date">
+                                <span class="event-date-day">22</span>
+                                <span class="event-date-month">Juni</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Workshop: "Kerajinan dari Sampah Plastik"</h4>
+                                <p>Workshop hands-on membuat kerajinan bernilai jual dari sampah plastik. Kuota terbatas!</p>
+                                <span class="event-type offline">Makassar</span>
+                                <button class="btn btn-primary btn-sm" style="margin-top: 12px;" onclick="showToast('Pendaftaran workshop dibuka!'); addPoints(30);">Daftar Sekarang</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Thread Form -->
+                <div class="form-card reveal" style="margin-top: 40px;">
+                    <h3>Buat Diskusi Baru</h3>
+                    <div class="form-group">
+                        <label>Judul Diskusi</label>
+                        <input type="text" id="threadTitle" placeholder="Tulis judul diskusimu">
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select id="threadCategory">
+                            <option value="">Pilih kategori</option>
+                            <option value="organik">Organik</option>
+                            <option value="plastik">Plastik</option>
+                            <option value="b3">B3</option>
+                            <option value="umum">Umum</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Isi Diskusi</label>
+                        <textarea id="threadContent" rows="4" placeholder="Jelaskan pertanyaan atau pengalamanmu"></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-submit" onclick="submitThread()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        Posting Diskusi
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: TENTANG -->
+    <div class="page" id="page-tentang">
+        <div class="about-hero">
+            <div class="section-container">
+                <h1 class="reveal">Tentang Macakka.Id</h1>
+                <p class="reveal">Membangun kesadaran masyarakat Indonesia dalam mengelola sampah secara mandiri, bertanggung jawab, dan berdampak nyata bagi lingkungan.</p>
+            </div>
+        </div>
+
+        <section class="section" style="padding-top: 40px;">
+            <div class="section-container">
+                <!-- Mission & Vision -->
+                <div class="mission-vision reveal">
+                    <div class="mission-box">
+                        <h3>Misi Kami</h3>
+                        <p>Membangun kesadaran masyarakat Indonesia dalam mengelola sampah secara mandiri, bertanggung jawab, dan berdampak nyata. Kami percaya bahwa perubahan dimulai dari rumah, dan setiap individu memiliki peran penting dalam menjaga kelestarian lingkungan.</p>
+                    </div>
+                    <div class="vision-box">
+                        <h3>Visi Kami</h3>
+                        <p>Indonesia bebas sampah sembarangan pada tahun 2045. Kami bermimpi melihat seluruh masyarakat Indonesia memiliki kesadaran tinggi akan pentingnya pengelolaan sampah, dengan sistem daur ulang yang terintegrasi dari Sabang sampai Merauke.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Stats -->
+        <section class="section" style="background: var(--cream);">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Dampak Kami</span>
+                    <h2>Dampak yang Sudah Dicapai</h2>
+                    <p>Bersama-sama kita membuat perbedaan nyata untuk lingkungan</p>
+                </div>
+                <div class="community-stats reveal">
+                    <div class="community-stat">
+                        <span class="community-stat-number" data-target="12400">0</span>
+                        <div class="community-stat-label">Pengguna Aktif</div>
+                    </div>
+                    <div class="community-stat">
+                        <span class="community-stat-number" data-target="3.2" data-decimal="true">0</span>
+                        <div class="community-stat-label">Ton Sampah Terkelola</div>
+                    </div>
+                    <div class="community-stat">
+                        <span class="community-stat-number" data-target="840">0</span>
+                        <div class="community-stat-label">Produk Daur Ulang</div>
+                    </div>
+                    <div class="community-stat">
+                        <span class="community-stat-number" data-target="48">0</span>
+                        <div class="community-stat-label">Kota Terjangkau</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team -->
+        <section class="section">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Tim Kami</span>
+                    <h2>Orang-orang di Balik Macakka.Id</h2>
+                    <p>Dedikasi penuh untuk lingkungan yang lebih baik</p>
+                </div>
+                <div class="grid-4">
+                    <div class="team-card reveal">
+                        <div class="team-avatar">MA</div>
+                        <h4>Muh. Albar</h4>
+                        <div class="team-role">Founder & CEO</div>
+                        <p class="team-desc">Penggiat lingkungan dengan visi besar untuk Indonesia bebas sampah. Memimpin strategi dan pertumbuhan Macakka.Id.</p>
+                    </div>
+                    <div class="team-card reveal">
+                        <div class="team-avatar" style="background: var(--teal);">AH</div>
+                        <h4>Asmaul Husna</h4>
+                        <div class="team-role">Head of Education</div>
+                        <p class="team-desc">Ahli pendidikan lingkungan yang merancang kurikulum pemilahan sampah untuk semua usia. Percaya edukasi adalah kunci perubahan.</p>
+                    </div>
+                    <div class="team-card reveal">
+                        <div class="team-avatar" style="background: var(--primary-bright);">AD</div>
+                        <h4>Andi Dhiva Siregar</h4>
+                        <div class="team-role">Head of Operations</div>
+                        <p class="team-desc">Mengelola jaringan bank sampah dan layanan pickup di seluruh Sulawesi Selatan. Fokus pada efisiensi operasional dan kualitas layanan.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners -->
+        <section class="section" style="background: var(--cream);">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Mitra</span>
+                    <h2>Mitra & Partner Kami</h2>
+                    <p>Bersama mitra terpercaya untuk dampak yang lebih besar</p>
+                </div>
+                <div class="partner-grid reveal">
+                    <div class="partner-item">
+                        <div class="partner-logo">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <h4>Bank Sampah Makassar</h4>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-logo">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </div>
+                        <h4>Dinas LH Sulsel</h4>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-logo">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                        </div>
+                        <h4>Komunitas Peduli Sampah</h4>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-logo">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                        <h4>Universitas Islam Negeri Makassar</h4>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-logo">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <h4>Greenpeace Indonesia</h4>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-logo">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+                        </div>
+                        <h4>WWF Indonesia</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="section">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Kontak</span>
+                    <h2>Hubungi Kami</h2>
+                    <p>Punya pertanyaan atau ingin berkolaborasi? Silakan hubungi kami</p>
+                </div>
+                <div class="contact-grid reveal">
+                    <div>
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </div>
+                            <div class="contact-detail">
+                                <h4>Email</h4>
+                                <p>halo@macakka.id</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                            </div>
+                            <div class="contact-detail">
+                                <h4>WhatsApp</h4>
+                                <p>0811-2345-6789</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            <div class="contact-detail">
+                                <h4>Alamat</h4>
+                                <p>Jl. Pendidikan No. 45, Tamalanrea, Makassar, Sulawesi Selatan</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-card">
+                        <h3>Kirim Pesan</h3>
+                        <div class="form-group">
+                            <label>Nama</label>
+                            <input type="text" id="contactName" placeholder="Nama lengkap">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="contactEmail" placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Pesan</label>
+                            <textarea id="contactMessage" rows="4" placeholder="Tulis pesanmu di sini"></textarea>
+                        </div>
+                        <button class="btn btn-primary btn-submit" onclick="submitContact()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            Kirim Pesan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="section-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a class="logo" style="color: white;">
+                        <div class="logo-icon" style="background: var(--primary-light);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2D6A1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <span class="logo-text"><span style="color: var(--primary-light);">Macakka</span><span style="color: var(--teal-light);">.Id</span></span>
+                    </a>
+                    <p>Platform edukasi pengelolaan dan pemilahan limbah sampah untuk masyarakat Indonesia. Pilah sampahmu, jaga bumi kita bersama.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+                        <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+                        <a href="#" aria-label="Twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+                        <a href="#" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></a>
+                    </div>
+                </div>
+                <div>
+                    <h4>Menu Utama</h4>
+                    <ul class="footer-links">
+                        <li><a onclick="navigateTo('beranda')">Beranda</a></li>
+                        <li><a onclick="navigateTo('panduan')">Panduan Pemilahan</a></li>
+                        <li><a onclick="navigateTo('layanan')">Layanan Sampah</a></li>
+                        <li><a onclick="navigateTo('marketplace')">Marketplace</a></li>
+                        <li><a onclick="navigateTo('komunitas')">Komunitas</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Layanan</h4>
+                    <ul class="footer-links">
+                        <li><a onclick="navigateTo('layanan')">Jemput Sampah</a></li>
+                        <li><a onclick="navigateTo('layanan')">Bank Sampah</a></li>
+                        <li><a onclick="navigateTo('layanan')">Konsultasi</a></li>
+                        <li><a onclick="navigateTo('marketplace')">Jual Produk</a></li>
+                        <li><a onclick="navigateTo('komunitas')">Event</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Perusahaan</h4>
+                    <ul class="footer-links">
+                        <li><a onclick="navigateTo('tentang')">Tentang Kami</a></li>
+                        <li><a onclick="navigateTo('tentang')">Tim</a></li>
+                        <li><a onclick="navigateTo('tentang')">Mitra</a></li>
+                        <li><a onclick="navigateTo('tentang')">Kontak</a></li>
+                        <li><a href="#">Karir</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p> 2025 Macakka.Id. Hak Cipta Dilindungi. Dibuat dengan untuk Indonesia yang lebih bersih.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== NAVIGATION =====
+        let currentPage = 'beranda';
+
+        function navigateTo(page) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Show target page
+            const targetPage = document.getElementById('page-' + page);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Update nav active state
+            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+            const navLink = document.getElementById('nav-' + page);
+            if (navLink) navLink.classList.add('active');
+
+            // Close mobile menu
+            document.getElementById('mobileMenu').classList.remove('active');
+
+            currentPage = page;
+
+            // Trigger animations for new page
+            setTimeout(() => {
+                initScrollReveal();
+                initCounters();
+            }, 100);
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+
+        // ===== SCROLL REVEAL =====
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        // ===== COUNTER ANIMATION =====
+        function initCounters() {
+            const counters = document.querySelectorAll('.stat-number, .community-stat-number');
+            counters.forEach(counter => {
+                const target = parseFloat(counter.getAttribute('data-target'));
+                const isDecimal = counter.getAttribute('data-decimal') === 'true';
+                const duration = 2000;
+                const start = 0;
+                const startTime = performance.now();
+
+                function updateCounter(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const current = start + (target - start) * easeOut;
+
+                    if (isDecimal) {
+                        counter.textContent = current.toFixed(1) + (counter.classList.contains('stat-number') ? '' : '');
+                        if (counter.classList.contains('stat-number')) counter.textContent += '';
+                    } else {
+                        counter.textContent = Math.floor(current).toLocaleString('id-ID');
+                    }
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        if (isDecimal) {
+                            counter.textContent = target.toFixed(1);
+                        } else {
+                            counter.textContent = target.toLocaleString('id-ID') + '+';
+                        }
+                    }
+                }
+
+                // Use intersection observer to trigger counter
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            requestAnimationFrame(updateCounter);
+                            observer.unobserve(counter);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                observer.observe(counter);
+            });
+        }
+
+        // ===== NAVBAR SCROLL =====
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ===== TOAST NOTIFICATION =====
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ===== POINTS SYSTEM =====
+        let currentPoints = 325;
+        const maxPoints = 500;
+
+        function addPoints(points) {
+            currentPoints = Math.min(currentPoints + points, maxPoints);
+            const fill = document.querySelector('.points-fill');
+            const text = document.querySelector('.points-text');
+            const percentage = (currentPoints / maxPoints) * 100;
+
+            fill.style.width = percentage + '%';
+            text.textContent = currentPoints + ' / ' + maxPoints + ' poin';
+
+            // Show point toast
+            const pointToast = document.getElementById('pointToast');
+            pointToast.querySelector('span').textContent = 'Kamu mendapat ' + points + ' poin!';
+            pointToast.classList.add('show');
+            setTimeout(() => {
+                pointToast.classList.remove('show');
+            }, 3000);
+
+            // Check level up
+            if (currentPoints >= 500) {
+                document.querySelector('.level-badge').textContent = 'Pejuang Lingkungan';
+                showToast('Selamat! Level naik menjadi Pejuang Lingkungan!');
+            }
+        }
+
+        // ===== COOKIE BANNER =====
+        function hideCookieBanner() {
+            document.getElementById('cookieBanner').classList.remove('show');
+            localStorage.setItem('cookiesAccepted', 'true');
+        }
+
+        // ===== LOADING SCREEN =====
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+
+                // Show cookie banner after loading
+                if (!localStorage.getItem('cookiesAccepted')) {
+                    setTimeout(() => {
+                        document.getElementById('cookieBanner').classList.add('show');
+                    }, 1000);
+                }
+
+                // Initialize
+                initScrollReveal();
+                initCounters();
+            }, 1500);
+        });
+
+        // ===== CATEGORY FILTER (PANDUAN) =====
+        function filterCategories(category, btn) {
+            // Update active tab
+            btn.parentElement.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Filter cards
+            const cards = document.querySelectorAll('#categoryGrid .category-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeInUp 0.4s ease-out';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // ===== WASTE CALCULATOR =====
+        function calculateWaste() {
+            const members = parseInt(document.getElementById('familyMembers').value) || 1;
+            const days = parseInt(document.getElementById('calcDays').value) || 7;
+
+            // Average waste per person per day: 0.7 kg
+            const totalPerDay = members * 0.7;
+            const totalWaste = (totalPerDay * days).toFixed(1);
+
+            const organic = (totalWaste * 0.6).toFixed(1);
+            const anorganic = (totalWaste * 0.25).toFixed(1);
+            const b3 = (totalWaste * 0.05).toFixed(1);
+            const residu = (totalWaste * 0.10).toFixed(1);
+
+            document.getElementById('totalWaste').textContent = totalWaste + ' kg';
+            document.getElementById('organicWaste').textContent = organic + ' kg';
+            document.getElementById('anorganicWaste').textContent = anorganic + ' kg';
+            document.getElementById('b3Waste').textContent = b3 + ' kg';
+            document.getElementById('residuWaste').textContent = residu + ' kg';
+
+            document.getElementById('calcResult').classList.add('show');
+
+            addPoints(20);
+        }
+
+        // ===== CHECKBOX TOGGLE =====
+        function toggleCheckbox(label) {
+            label.classList.toggle('checked');
+            const checkbox = label.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+        }
+
+        // ===== PICKUP FORM =====
+        function scrollToForm() {
+            document.getElementById('pickupForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function submitPickupForm() {
+            const name = document.getElementById('pickupName').value;
+            if (!name) {
+                showToast('Mohon isi nama lengkap!');
+                return;
+            }
+            showToast('Pemesanan berhasil! Tim kami akan menghubungimu segera.');
+            addPoints(50);
+        }
+
+        // ===== PRODUCT FILTER (MARKETPLACE) =====
+        function filterProducts(category, btn) {
+            btn.parentElement.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            const cards = document.querySelectorAll('#productsGrid .product-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeInUp 0.4s ease-out';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function searchProducts() {
+            const search = document.getElementById('productSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('#productsGrid .product-card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('h4').textContent.toLowerCase();
+                const seller = card.querySelector('.product-seller span').textContent.toLowerCase();
+
+                if (title.includes(search) || seller.includes(search)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function sortProducts() {
+            const sort = document.getElementById('sortSelect').value;
+            const grid = document.getElementById('productsGrid');
+            const cards = Array.from(grid.querySelectorAll('.product-card'));
+
+            cards.sort((a, b) => {
+                if (sort === 'price-low') {
+                    return parseInt(a.getAttribute('data-price')) - parseInt(b.getAttribute('data-price'));
+                } else if (sort === 'price-high') {
+                    return parseInt(b.getAttribute('data-price')) - parseInt(a.getAttribute('data-price'));
+                } else if (sort === 'popular') {
+                    return parseInt(b.getAttribute('data-popular')) - parseInt(a.getAttribute('data-popular'));
+                }
+                return 0;
+            });
+
+            cards.forEach(card => grid.appendChild(card));
+        }
+
+        function toggleWishlist(btn) {
+            btn.style.background = '#FEE2E2';
+            btn.style.color = '#EF4444';
+            showToast('Produk ditambahkan ke wishlist!');
+        }
+
+        // ===== COMMUNITY TABS =====
+        function switchTab(tabName, btn) {
+            btn.parentElement.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        function submitThread() {
+            const title = document.getElementById('threadTitle').value;
+            if (!title) {
+                showToast('Mohon isi judul diskusi!');
+                return;
+            }
+            showToast('Diskusi berhasil diposting!');
+            addPoints(35);
+
+            // Clear form
+            document.getElementById('threadTitle').value = '';
+            document.getElementById('threadCategory').value = '';
+            document.getElementById('threadContent').value = '';
+        }
+
+        // ===== CONTACT FORM =====
+        function submitContact() {
+            const name = document.getElementById('contactName').value;
+            if (!name) {
+                showToast('Mohon isi nama!');
+                return;
+            }
+            showToast('Pesan berhasil dikirim! Kami akan membalas segera.');
+            addPoints(25);
+
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactMessage').value = '';
+        }
+
+        // ===== SMOOTH SCROLL FOR ANCHORS =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
